@@ -10,7 +10,7 @@ pygame.init()
 WIDTH, HEIGHT = 1000, 640
 FPS = 60
 
-G = 3
+G = 1
 
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -232,8 +232,8 @@ while running:
 
                 dist = ((dx)**2 + (dy)**2)**0.5 + 0.0000000001
                 overlap = p1.radius + p2.radius - dist
-                
                 if overlap > 0:
+                    
                     nx = (dx)/dist
                     ny = (dy)/dist
 
@@ -246,7 +246,34 @@ while running:
                     rvx = p2.vx - p1.vx
                     rvy = p2.vy - p1.vy
 
+                    relative_speed = rvx * nx + rvy * ny
 
+                    if relative_speed < 0:
+                        restitution = 0.9
+
+                        inv_m1 = 1 / p1.mass
+                        inv_m2 = 1 / p2.mass
+
+                        j = -(1 + restitution) * relative_speed
+                        j /= inv_m1 + inv_m2
+
+                        impulse_x = j * nx
+                        impulse_y = j * ny
+
+                        p1.vx -= impulse_x / p1.mass
+                        p1.vy -= impulse_y / p1.mass
+
+                        p2.vx += impulse_x / p2.mass
+                        p2.vy += impulse_y / p2.mass
+
+
+#                     velo = ((p1.vx)**2 + (p1.vy)**2)**0.5
+# 
+#                     p1.vx -= nx * overlap/(2*dt)
+#                     p1.vy -= ny * overlap/(2*dt)
+# 
+#                     p2.vx += nx * overlap/(2*dt)
+#                     p2.vy += ny * overlap/(2*dt)
 
 
         pass
