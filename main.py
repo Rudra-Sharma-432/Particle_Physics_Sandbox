@@ -1,6 +1,9 @@
 import pygame as pg
+# import math
 
 import settings
+from geometry import Vector
+from entities import Particle
 
 
 # pygame setup
