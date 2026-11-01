@@ -249,7 +249,7 @@ while running:
                     relative_speed = rvx * nx + rvy * ny
 
                     if relative_speed < 0:
-                        restitution = 0.9
+                        restitution = 1.0
 
                         inv_m1 = 1 / p1.mass
                         inv_m2 = 1 / p2.mass
