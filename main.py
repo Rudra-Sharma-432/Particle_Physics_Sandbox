@@ -1,12 +1,6 @@
 import pygame as pg
 
 import settings
-# from settings import WIDTH, HEIGHT, FPS
-
-# from simulation.world import World
-# from simulation.presets import load_preset
-# from ui.panel import ControlPanel
-# from ui.hud import HUD
 
 
 # pygame setup
