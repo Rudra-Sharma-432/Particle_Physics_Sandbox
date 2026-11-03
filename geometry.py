@@ -34,6 +34,19 @@ class Vector:
   def __rmul__(self, other):
     return self.__mul__(other)
 
+  def project_scalar(self, other: 'Vector') -> float:
+    """Calculates the scalar projection of self onto other."""
+    if not isinstance(other, Vector):
+      return NotImplemented
+    return (self * other) / other.magnitude
+
+  def project_vector(self, other: 'Vector') -> 'Vector':
+    """Calculates the vector projection of self onto other."""
+    if not isinstance(other, Vector):
+      return NotImplemented
+    scale = (self * other) / (other.magnitude ** 2)
+    return scale * other
+
   def __repr__(self):
     return f"Vector(x={self.x:.2f}, y={self.y:.2f}, mag={self.magnitude:.2f}, theta={self.theta:.2f})"
 

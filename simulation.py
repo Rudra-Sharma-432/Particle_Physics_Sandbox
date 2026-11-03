@@ -5,7 +5,7 @@ from entities import Particle
 class SimulationSpace:
     def __init__(self, G: float = 1.0):
         self.particles = []
-        self.G = G  # Gravitational constant
+        self.G = G
 
     def add_particle(self, particle: Particle):
         self.particles.append(particle)
@@ -29,7 +29,7 @@ class SimulationSpace:
                 distance = displacement.magnitude
 
                 # Prevent division by zero if particles overlap perfectly
-                if distance < 0.1:
+                if distance < 0.000000001:
                     continue
 
                 # Newton's Law of Universal Gravitation: F = G * (m1 * m2) / r^2
@@ -50,7 +50,26 @@ class SimulationSpace:
         """Placeholder for handling bounce or merging collisions."""
         # You will loop through pairs here, check if their distance < (radius1 + radius2)
         # And adjust their velocities (velo) accordingly.
-        pass
+        n = len(self.particles)
+
+        for i in range(n):
+            for j in range(i + 1, n):
+                p1 = self.particles[i]
+                p2 = self.particles[j]
+
+                # Displacement vector from p1 to p2
+                displacement = p2.pos - p1.pos
+                distance = displacement.magnitude
+
+                # Prevent division by zero if particles overlap perfectly
+                if distance < p1.radius + p2.radius:
+                    # direction = displacement * (1.0 / distance)
+
+                    p1.velo -= 2 * p1.velo.project_vector(displacement)
+                    p2.velo += 2 * p2.velo.project_vector(displacement)
+                    
+                
+
 
     def update(self, dt: float):
         """Advances the simulation by time step dt."""

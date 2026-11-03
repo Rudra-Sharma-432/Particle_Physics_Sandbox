@@ -276,8 +276,6 @@ while running:
 #                     p2.vy += ny * overlap/(2*dt)
 
 
-        pass
-
     # ---- Drawing ----
     screen.fill(BGC)
 
