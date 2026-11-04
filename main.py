@@ -7,19 +7,6 @@ from entities import Particle
 from simulation import SimulationSpace
 
 space = SimulationSpace(G=1.0)
-planet = Particle(
-        mass=100.0,
-        pos=Vector(x=100.0, y=100.0),
-        velo=Vector(x=0.0, y=0.0)
-    )
-moon = Particle(
-        mass=40.0,
-        pos=Vector(x=50.0, y=0.0),
-        velo=Vector(x=0.0, y=50.0)
-    )
-
-space.add_particle(planet)
-space.add_particle(moon)
 
 FPS = 60
 dt = 1/1000
@@ -39,7 +26,7 @@ paused = False
 
 mass = 25
 MIN_MASS = 1
-MAX_MASS = 100
+MAX_MASS = 300
 
 BLACK = (0, 0, 0)
 BGC = (25, 25, 25)
@@ -151,13 +138,13 @@ while running:
                 paused = not paused
 
             elif restart_button.collidepoint(mouse_pos):
-                space = SimulationSpace(G=1.0)
+                space = SimulationSpace(G=30.0)
                 paused = False
 
             elif world.collidepoint(mouse_pos):
                 # Spawn a particle in the simulation area
                 pos_vector = Vector(mouse_pos[0], mouse_pos[1])
-                space.add_particle(Particle(mass, pos_vector))
+                space.add_particle(Particle(mass = mass,pos = pos_vector))
 
         elif event.type == pygame.MOUSEBUTTONUP:
             slider_dragging = False

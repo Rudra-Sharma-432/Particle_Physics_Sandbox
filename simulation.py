@@ -50,31 +50,40 @@ class SimulationSpace:
         """Placeholder for handling bounce or merging collisions."""
         # You will loop through pairs here, check if their distance < (radius1 + radius2)
         # And adjust their velocities (velo) accordingly.
-        n = len(self.particles)
+        n_p = len(self.particles)
 
-        for i in range(n):
-            for j in range(i + 1, n):
-                p1 = self.particles[i]
-                p2 = self.particles[j]
+        for i in range(n_p):
+            for j in range(i + 1, n_p):
+                p1, p2 = self.particles[i], self.particles[j]
 
                 # Displacement vector from p1 to p2
                 displacement = p2.pos - p1.pos
                 distance = displacement.magnitude
 
-                # Prevent division by zero if particles overlap perfectly
-                if distance < p1.radius + p2.radius:
-                    # direction = displacement * (1.0 / distance)
+                min_dist = p1.radius + p2.radius
 
-                    p1.velo -= 2 * p1.velo.project_vector(displacement)
-                    p2.velo += 2 * p2.velo.project_vector(displacement)
-                    
+                if distance >= min_dist or distance < 1e-9:
+                    continue
+
+                n = displacement * (1.0 / distance)                 # unit normal p1 -> p2
+                overlap = min_dist - distance
+                total = p1.mass + p2.mass
+                p1.pos = p1.pos - n * (overlap * p2.mass / total)
+                p2.pos = p2.pos + n * (overlap * p1.mass / total)
+
+                rel = (p2.velo - p1.velo) * n        # Vector * Vector = dot
+                if rel >= 0:
+                    continue                         # already separating
+                j_imp = -(1 + restitution) * rel / (1 / p1.mass + 1 / p2.mass)
+                p1.velo = p1.velo - n * (j_imp / p1.mass)
+                p2.velo = p2.velo + n * (j_imp / p2.mass)
                 
 
 
     def update(self, dt: float):
         """Advances the simulation by time step dt."""
         self.apply_gravity()
-        self.handle_collisions()
+        self.handle_collisions(1.0)
 
         # Update positions and velocities for all particles using standard Euler integration
         for p in self.particles:
